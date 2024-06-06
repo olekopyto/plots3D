@@ -13,7 +13,7 @@ GUIMyFrame1::GUIMyFrame1(wxWindow* parent)
 void GUIMyFrame1::showInfo(wxMouseEvent& event)
 {
 	//uzupe³niæ o instrukcjê!
-	wxMessageDialog* infoDialog = new wxMessageDialog(this, "-> use \"sqrt()\" as aquare root\n->use \"^n\" to raise to the n-th power", 
+	wxMessageDialog* infoDialog = new wxMessageDialog(this, "-> use only x and y variables\n-> use \"sqrt()\" as aquare root\n->use \"^n\" to raise to the n-th power\n-> use \".\" to create floating-point numbers\n-> you can use constants \"pi\" and \"e\"\n-> sin(), cos() and tan() are available to be used too", 
 															"How to plot?", wxOK | wxICON_INFORMATION);
 	infoDialog->ShowModal();
 	infoDialog->Destroy();
@@ -21,14 +21,45 @@ void GUIMyFrame1::showInfo(wxMouseEvent& event)
 
 bool GUIMyFrame1::checkFunction()
 {
-	bool errorF = false;
-	//sprawdzanie porpawnosci wprowadzonej funkcji!
+	double x, y;
+	te_variable vars[] = { {"x", &x}, {"y", &y} };
 
-	//tie(zValuesVec, xValuesVec, yValuesVec) = evaluatePlaneExpression(function, xMin, xMax, yMin, yMax);
+	const char* c = function.c_str();
 
-	if ( errorF ) {
+	int err;
+	te_expr* expr = te_compile(c, vars, 2, &err);
+	
+	if (!expr) {
 		textCtrlFunkcja->SetValue("");
 		return false;
+	}
+
+	if (!checkNumbers()) {
+		return false;
+	}
+	
+	int sample = 50;
+
+	double move = std::max(((xMax - xMin) / sample), (yMax - yMin) / sample);
+	double movex = std::min((xMax - xMin), move);
+	double movey = std::min((yMax - yMin), move);
+	
+	zValuesVec.clear();
+
+	vector < double > tempVec;
+
+	for (double xi = xMin; xi <= (xMax); xi += movex) {
+
+		for (double yi = yMin; yi <= (yMax); yi += movey) {
+
+			x = xi;
+			y = yi;
+
+			tempVec.push_back(te_eval(expr));
+		}
+		
+		zValuesVec.push_back(tempVec);
+		tempVec.clear();
 	}
 
 	return true;
@@ -211,7 +242,9 @@ void GUIMyFrame1::saveClick(wxMouseEvent& event)
 
 void GUIMyFrame1::generateClick(wxMouseEvent& event)
 {
-	if (!checkFunction() || !checkNumbers()) return;
+	function = textCtrlFunkcja->GetValue();
+
+	if (!checkFunction()) return;
 	repaint();
 	generateClicked = true;
 }
@@ -219,12 +252,12 @@ void GUIMyFrame1::generateClick(wxMouseEvent& event)
 void GUIMyFrame1::panelRepaint(wxSizeEvent& event)
 {
 	if ( ( panelWidth != panelNaWykres->GetSize().GetWidth() || panelHeight != panelNaWykres->GetSize().GetHeight() ) && generateClicked ) {
-
 		panelWidth = panelNaWykres->GetSize().GetWidth();
 		panelHeight = panelNaWykres->GetSize().GetHeight();
-
 		repaint();
+		return;
 	}
+
 	panelWidth = panelNaWykres->GetSize().GetWidth();
 	panelHeight = panelNaWykres->GetSize().GetHeight();
 }
@@ -235,13 +268,12 @@ void GUIMyFrame1::repaint()
 	if (isPerspective()) {
 		//generuj rzut perspektywiczny
 		objPer.getAxis(xMin, xMax, yMin, yMax, zMin, zMax);
-		vector<vector<double>> vec{ 5 };
-		objPer.RecountFunctionIntoData(vec);
+		objPer.RecountFunctionIntoData(zValuesVec);
 		objPer.Repaint(panelNaWykres, panelWidth, panelHeight);
 	}
 	else {
 		//generuj mape konturowa
-		objMap.getZ( zMin, zMax );
+		objMap.getRanges(xMin, xMax, yMin, yMax, zMin, zMax );
 		objMap.repaint(panelNaWykres, panelWidth, panelHeight);
 		
 	}

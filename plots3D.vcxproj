@@ -24,6 +24,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="map.cpp" />
     <ClCompile Include="perspectivic.cpp" />
+    <ClCompile Include="tinyexpr.c" />
     <ClCompile Include="vecmat.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -32,6 +33,7 @@
     <ClInclude Include="map.h" />
     <ClInclude Include="MyPrinter.h" />
     <ClInclude Include="perspectivic.h" />
+    <ClInclude Include="tinyexpr.h" />
     <ClInclude Include="vecmat.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -16,11 +16,17 @@ private:
 	int numberOfPoints;
 	vector<vector<double>> functionPoints;
 
-	double minZ;
-	double maxZ;
+	double countFunction(double x, double y);
+	
+	double xmin;
+	double xmax;
+	double ymin;
+	double ymax;
+	double zmin;
+	double zmax;
 
 public:
-	void getZ(double min, double max);
+	void getRanges(double xmi, double xma, double ymi, double yma, double zmi, double zma);
 
 	double shepard(double x, double y);
 	void repaint(wxPanel* drawingPanel, int w, int h);

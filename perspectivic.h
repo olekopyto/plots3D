@@ -9,7 +9,6 @@
 
 using namespace std;
 
-
 class Perspectivic {
 private:
 	struct Point {
@@ -31,8 +30,8 @@ private:
 	struct AxisNumbers {
 		vector<Perspectivic::Segment> nextSegmentsToDrawCircle;
 		double numberOnAxis;
-
-		AxisNumbers(vector<Perspectivic::Segment> inside, double number) : nextSegmentsToDrawCircle(inside), numberOnAxis(number) {}
+		
+		AxisNumbers(vector<Perspectivic::Segment> inside, double number ) : nextSegmentsToDrawCircle(inside), numberOnAxis(number) {}
 	};
 
 	vector<Perspectivic::Segment> data;
@@ -56,10 +55,12 @@ private:
 
 public:
 
-	void getAxis(double xmi, double xma, double ymi, double yma, double zmi, double zma);
+	void getAxis(double xmi, double xma, double ymi, double yma, double zmi, double zma) {
+		xmin = xmi; xmax = xma; ymin = ymi; ymax = yma; zmin = zmi; zmax = zma;
+	}
 
 	double countFunction(double x, double y);
-	void RecountFunctionIntoData(vector<vector<double>> funValues);
+	void RecountFunctionIntoData( const vector<vector<double>> &funValues);
 
 	Matrix4 XRotation(double alpha);
 	Matrix4 YRotation(double alpha);

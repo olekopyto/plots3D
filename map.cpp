@@ -1,9 +1,14 @@
 #include "map.h"
+#include < time.h>
 
-void Map::getZ(double min, double max)
+void Map::getRanges(double xmi, double xma, double ymi, double yma, double zmi, double zma)
 {
-	minZ = min;
-	maxZ = max;
+	xmin = xmi;
+	xmax = xma;
+	ymin = ymi;
+	ymax = yma;
+	zmin = zmi;
+	zmax = zma;
 }
 
 double Map::shepard(double x, double y)
@@ -116,61 +121,41 @@ void Map::repaint(wxPanel* drawingPanel, int w, int h)
 			BufferedDC.DrawLine(item[0], item[1]);
 	}
 }
+/////////// temp fun
+double Map::countFunction(double x, double y) {
+	return sin(x) + x + y;
+}
+
+////
+
 
 void Map::prepareData(int num)
 {
-	int i;
+	//srand(time(NULL));
+	int i=0;
 	double x, y;
-	srand(376257);
-	switch (num)
-	{
-	case 0:     numberOfPoints = 5;
-		functionPoints[0][0] = -1.0;	functionPoints[0][1] = 1.0;	functionPoints[0][2] = 0.0;
-		functionPoints[1][0] = 1.0;	functionPoints[1][1] = 1.0;	functionPoints[1][2] = 25.0;
-		functionPoints[2][0] = 1.0;	functionPoints[2][1] = -1.0;	functionPoints[2][2] = 5.0;
-		functionPoints[3][0] = -1.0;	functionPoints[3][1] = -1.0;	functionPoints[3][2] = 25.0;
-		functionPoints[4][0] = 0.0;	functionPoints[4][1] = 0.0;	functionPoints[4][2] = 15.0;
-		break;
-	case 1:     numberOfPoints = 100;
-		//BOB zrób ¿eby dzia³a³o CIUM!
-		for (i = 0; i < numberOfPoints; i++)
-		{
-			x = (double(rand()) / RAND_MAX);
-			y = (double(rand()) / RAND_MAX);
+	///// temp
+	int sample = 10;
+	double move = std::max(((xmax - xmin) / sample), (ymax - ymin) / sample);
+	double movex = std::min((xmax - xmin), move);
+	double movey = std::min((ymax - ymin), move);
+	/////
+
+	numberOfPoints = 100;
+
+	//temp fun
+
+	for (double x = xmin; x < (xmax); x += movex) {
+
+		for (double y = ymin; y < (ymax); y += movey) {
+
 			functionPoints[i][0] = x;
 			functionPoints[i][1] = y;
-			functionPoints[i][2] = sin(x) + x + y;
+			functionPoints[i][2] = std::min(std::max(countFunction(x, y), zmin), zmax);
+			i++;
 		}
-		break;
-	case 2:     numberOfPoints = 100;
-		for (i = 0; i < numberOfPoints; i++)
-		{
-			x = 4.8 * (double(rand()) / RAND_MAX) - 2.4;
-			y = 4.8 * (double(rand()) / RAND_MAX) - 2.4;
-			functionPoints[i][0] = x;
-			functionPoints[i][1] = y;
-			functionPoints[i][2] = x * (2 * x - 7) * (2 * y + 1) + 2 * y;
-		}
-		break;
-	case 3:     numberOfPoints = 10;
-		for (i = 0; i < numberOfPoints; i++)
-		{
-			x = 4.8 * (double(rand()) / RAND_MAX) - 2.4;
-			y = 4.8 * (double(rand()) / RAND_MAX) - 2.4;
-			functionPoints[i][0] = x;
-			functionPoints[i][1] = y;
-			functionPoints[i][2] = x * sin(2 * y);
-		}
-		break;
-	case 4:     numberOfPoints = 100;
-		for (i = 0; i < numberOfPoints; i++)
-		{
-			x = 2 * (double(rand()) / RAND_MAX) - 1;
-			y = 2 * (double(rand()) / RAND_MAX) - 1;
-			functionPoints[i][0] = x;
-			functionPoints[i][1] = y;
-			functionPoints[i][2] = sin(8 * (x * x + y * y));
-		}
-		break;
 	}
+
+	////////////
+
 }
