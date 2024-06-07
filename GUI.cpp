@@ -19,6 +19,10 @@ MyFrame1::MyFrame1(wxWindow* parent, wxWindowID id, const wxString& title, const
 	panelNaWykres = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxSize(700, 700), wxTAB_TRAVERSAL);
 	panelNaWykres->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENU));
 
+	//ruch mysza
+	panelNaWykres->Bind(wxEVT_ENTER_WINDOW, &MyFrame1::onMouseEnter, this);
+	panelNaWykres->Bind(wxEVT_MOTION, &MyFrame1::onMouseMove, this);
+
 	sizerPodzialOkna->Add(panelNaWykres, 1, wxEXPAND | wxALL, 5);
 
 	wxBoxSizer* sizerMenu;

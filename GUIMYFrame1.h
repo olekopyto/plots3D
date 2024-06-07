@@ -63,6 +63,9 @@ public:
 
 	void panelRepaint(wxSizeEvent& event);
 
+	void onMouseEnter(wxMouseEvent& event);
+	void onMouseMove(wxMouseEvent& event);
+
 	string getFunction() const { return function; }
 	bool checkFunction();
 

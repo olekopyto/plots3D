@@ -278,3 +278,20 @@ void GUIMyFrame1::repaint()
 		
 	}
 }
+
+void GUIMyFrame1::onMouseEnter(wxMouseEvent& event)
+{
+	wxPoint pos = event.GetPosition();
+	wxLogMessage("Mouse entered at (%d, %d)", pos.x, pos.y);
+	event.Skip();
+}
+
+void GUIMyFrame1::onMouseMove(wxMouseEvent& event)
+{
+	if (event.Entering())
+	{
+		wxPoint pos = event.GetPosition();
+		wxLogMessage("Mouse moved at (%d, %d)", pos.x, pos.y);
+	}
+	event.Skip();
+}
