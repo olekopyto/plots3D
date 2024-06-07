@@ -286,17 +286,22 @@ void GUIMyFrame1::onMouseEnter(wxMouseEvent& event)
 
 void GUIMyFrame1::onMouseMove(wxMouseEvent& event)
 {
-	if (!movingAllowed) return;
+	if (!movingAllowed || isMap()) return;
 
 	mouseX = event.GetPosition().x;
 	mouseY = event.GetPosition().y;
+
+	//na test
 	textFunkcja->SetLabel(to_string(mouseX) + " " + to_string(mouseY));
 
+	//tutaj przekazujemy do perspectivic i rysujemy
 
 }
 
 void GUIMyFrame1::onMouseLeave(wxMouseEvent& event)
 {
 	movingAllowed = false;
+
+	//na test
 	textFunkcja->SetLabel("function");
 }
