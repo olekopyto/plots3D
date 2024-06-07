@@ -22,6 +22,7 @@ MyFrame1::MyFrame1(wxWindow* parent, wxWindowID id, const wxString& title, const
 	//ruch mysza
 	panelNaWykres->Bind(wxEVT_ENTER_WINDOW, &MyFrame1::onMouseEnter, this);
 	panelNaWykres->Bind(wxEVT_MOTION, &MyFrame1::onMouseMove, this);
+	panelNaWykres->Bind(wxEVT_LEAVE_WINDOW, &MyFrame1::onMouseLeave, this);
 
 	sizerPodzialOkna->Add(panelNaWykres, 1, wxEXPAND | wxALL, 5);
 

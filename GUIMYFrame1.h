@@ -52,6 +52,12 @@ private:
 	Perspectivic objPer;
 	Map objMap;
 
+	bool movingAllowed = false;
+	int mouseX;
+	int mouseY;
+
+
+
 public:
 	// Handlers for MyFrame1 events;
 	void showInfo(wxMouseEvent& event);
@@ -65,6 +71,7 @@ public:
 
 	void onMouseEnter(wxMouseEvent& event);
 	void onMouseMove(wxMouseEvent& event);
+	void onMouseLeave(wxMouseEvent& event);
 
 	string getFunction() const { return function; }
 	bool checkFunction();

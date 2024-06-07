@@ -281,17 +281,22 @@ void GUIMyFrame1::repaint()
 
 void GUIMyFrame1::onMouseEnter(wxMouseEvent& event)
 {
-	wxPoint pos = event.GetPosition();
-	wxLogMessage("Mouse entered at (%d, %d)", pos.x, pos.y);
-	event.Skip();
+	movingAllowed = true;
 }
 
 void GUIMyFrame1::onMouseMove(wxMouseEvent& event)
 {
-	if (event.Entering())
-	{
-		wxPoint pos = event.GetPosition();
-		wxLogMessage("Mouse moved at (%d, %d)", pos.x, pos.y);
-	}
-	event.Skip();
+	if (!movingAllowed) return;
+
+	mouseX = event.GetPosition().x;
+	mouseY = event.GetPosition().y;
+	textFunkcja->SetLabel(to_string(mouseX) + " " + to_string(mouseY));
+
+
+}
+
+void GUIMyFrame1::onMouseLeave(wxMouseEvent& event)
+{
+	movingAllowed = false;
+	textFunkcja->SetLabel("function");
 }
